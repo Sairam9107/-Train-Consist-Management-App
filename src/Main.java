@@ -1,127 +1,56 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
-// Represents a Reservation (Confirmed Booking)
-class Reservation {
-    private String reservationId;
-    private String guestName;
-    private String roomType;
-    private int numberOfNights;
-    private double pricePerNight;
+// Bogie Class (same as UC7)
+class Bogie {
+    private String name;
+    private int capacity;
 
-    public Reservation(String reservationId, String guestName, String roomType,
-                       int numberOfNights, double pricePerNight) {
-        this.reservationId = reservationId;
-        this.guestName = guestName;
-        this.roomType = roomType;
-        this.numberOfNights = numberOfNights;
-        this.pricePerNight = pricePerNight;
+    public Bogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
     }
 
-    public String getReservationId() {
-        return reservationId;
+    public String getName() {
+        return name;
     }
 
-    public String getGuestName() {
-        return guestName;
-    }
-
-    public String getRoomType() {
-        return roomType;
-    }
-
-    public int getNumberOfNights() {
-        return numberOfNights;
-    }
-
-    public double getTotalCost() {
-        return numberOfNights * pricePerNight;
+    public int getCapacity() {
+        return capacity;
     }
 
     @Override
     public String toString() {
-        return "Reservation ID: " + reservationId +
-                ", Guest: " + guestName +
-                ", Room: " + roomType +
-                ", Nights: " + numberOfNights +
-                ", Total Cost: ₹" + getTotalCost();
-    }
-}
-
-// Maintains Booking History (Ordered Storage)
-class BookingHistory {
-    private List<Reservation> confirmedBookings;
-
-    public BookingHistory() {
-        confirmedBookings = new ArrayList<>();
-    }
-
-    // Add confirmed reservation
-    public void addReservation(Reservation reservation) {
-        confirmedBookings.add(reservation);
-    }
-
-    // Retrieve all bookings
-    public List<Reservation> getAllReservations() {
-        return Collections.unmodifiableList(confirmedBookings);
-    }
-}
-
-// Generates Reports from Booking History
-class BookingReportService {
-
-    // Display all bookings
-    public void displayAllBookings(List<Reservation> reservations) {
-        if (reservations.isEmpty()) {
-            System.out.println("No bookings found.");
-            return;
-        }
-
-        System.out.println("=== Booking History ===");
-        for (Reservation res : reservations) {
-            System.out.println(res);
-        }
-    }
-
-    // Generate summary report
-    public void generateSummaryReport(List<Reservation> reservations) {
-        int totalBookings = reservations.size();
-        double totalRevenue = 0.0;
-
-        for (Reservation res : reservations) {
-            totalRevenue += res.getTotalCost();
-        }
-
-        System.out.println("\n=== Booking Summary Report ===");
-        System.out.println("Total Bookings: " + totalBookings);
-        System.out.println("Total Revenue: ₹" + totalRevenue);
+        return name + " - Capacity: " + capacity;
     }
 }
 
 // Main Class
- class UseCase8BookingHistoryReport {
+public class UC8FilterBogiesUsingStreams {
 
     public static void main(String[] args) {
 
-        BookingHistory history = new BookingHistory();
-        BookingReportService reportService = new BookingReportService();
+        // Step 1: Create List (Reuse UC7 Data)
+        List<Bogie> bogies = new ArrayList<>();
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("Luxury Coach", 80));
 
-        // Simulating confirmed bookings
-        Reservation r1 = new Reservation("RES101", "Alice", "Deluxe", 2, 3000);
-        Reservation r2 = new Reservation("RES102", "Bob", "Standard", 3, 2000);
-        Reservation r3 = new Reservation("RES103", "Charlie", "Suite", 1, 5000);
+        System.out.println("Original Bogie List:");
+        bogies.forEach(System.out::println);
 
-        // Add to booking history (in order of confirmation)
-        history.addReservation(r1);
-        history.addReservation(r2);
-        history.addReservation(r3);
+        // Step 2: Apply Stream Filtering (capacity > 60)
+        List<Bogie> filteredBogies = bogies.stream()
+                .filter(b -> b.getCapacity() > 60)
+                .collect(Collectors.toList());
 
-        // Admin views booking history
-        List<Reservation> bookings = history.getAllReservations();
-        reportService.displayAllBookings(bookings);
+        // Step 3: Display Filtered Result
+        System.out.println("\nFiltered Bogies (Capacity > 60):");
+        filteredBogies.forEach(System.out::println);
 
-        // Admin generates report
-        reportService.generateSummaryReport(bookings);
-
-        System.out.println("\nNote: Booking history remains unchanged after reporting.");
+        // Step 4: Verify Original List is Unchanged
+        System.out.println("\nOriginal List After Filtering (Unchanged):");
+        bogies.forEach(System.out::println);
     }
 }
