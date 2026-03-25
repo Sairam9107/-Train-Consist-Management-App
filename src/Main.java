@@ -1,105 +1,61 @@
 import java.util.*;
 
-// Represents an Add-On Service
-class AddOnService {
-    private String serviceName;
-    private double cost;
+// Bogie Class (Custom Object)
+class Bogie {
+    private String name;
+    private int capacity;
 
-    public AddOnService(String serviceName, double cost) {
-        this.serviceName = serviceName;
-        this.cost = cost;
+    public Bogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
     }
 
-    public String getServiceName() {
-        return serviceName;
+    public String getName() {
+        return name;
     }
 
-    public double getCost() {
-        return cost;
+    public int getCapacity() {
+        return capacity;
     }
 
     @Override
     public String toString() {
-        return serviceName + " (₹" + cost + ")";
-    }
-}
-
-// Manages Add-On Services for Reservations
-class AddOnServiceManager {
-
-    // Map: Reservation ID → List of Services
-    private Map<String, List<AddOnService>> reservationServicesMap;
-
-    public AddOnServiceManager() {
-        reservationServicesMap = new HashMap<>();
-    }
-
-    // Add service to a reservation
-    public void addService(String reservationId, AddOnService service) {
-        reservationServicesMap
-                .computeIfAbsent(reservationId, k -> new ArrayList<>())
-                .add(service);
-    }
-
-    // Get all services for a reservation
-    public List<AddOnService> getServices(String reservationId) {
-        return reservationServicesMap.getOrDefault(reservationId, new ArrayList<>());
-    }
-
-    // Calculate total add-on cost
-    public double calculateTotalCost(String reservationId) {
-        List<AddOnService> services = getServices(reservationId);
-        double total = 0.0;
-
-        for (AddOnService service : services) {
-            total += service.getCost();
-        }
-
-        return total;
-    }
-
-    // Display services for a reservation
-    public void displayServices(String reservationId) {
-        List<AddOnService> services = getServices(reservationId);
-
-        if (services.isEmpty()) {
-            System.out.println("No add-on services selected.");
-            return;
-        }
-
-        System.out.println("Add-On Services for Reservation ID: " + reservationId);
-        for (AddOnService service : services) {
-            System.out.println("- " + service);
-        }
-
-        System.out.println("Total Add-On Cost: ₹" + calculateTotalCost(reservationId));
+        return name + " - Capacity: " + capacity;
     }
 }
 
 // Main Class
- class UseCase7AddOnServiceSelection {
+public class UC7SortBogiesByCapacity {
 
     public static void main(String[] args) {
 
-        AddOnServiceManager manager = new AddOnServiceManager();
+        // Step 1: Create List of Bogies
+        List<Bogie> bogies = new ArrayList<>();
 
-        // Sample Reservation ID (Assumed existing booking)
-        String reservationId = "RES123";
+        // Step 2: Add Passenger Bogies
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("First Class", 24));
 
-        // Guest selects add-on services
-        AddOnService breakfast = new AddOnService("Breakfast", 500);
-        AddOnService airportPickup = new AddOnService("Airport Pickup", 1200);
-        AddOnService spa = new AddOnService("Spa Access", 2000);
+        System.out.println("Before Sorting:");
+        for (Bogie b : bogies) {
+            System.out.println(b);
+        }
 
-        // Adding services to reservation
-        manager.addService(reservationId, breakfast);
-        manager.addService(reservationId, airportPickup);
-        manager.addService(reservationId, spa);
+        // Step 3: Sort using Comparator (Ascending Order)
+        bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
 
-        // Display selected services
-        manager.displayServices(reservationId);
+        System.out.println("\nAfter Sorting (By Capacity - Ascending):");
+        for (Bogie b : bogies) {
+            System.out.println(b);
+        }
 
-        // Demonstrate independence from booking system
-        System.out.println("\nNote: Booking and room allocation remain unchanged.");
+        // Optional: Descending Order (for planning highest capacity first)
+        bogies.sort(Comparator.comparingInt(Bogie::getCapacity).reversed());
+
+        System.out.println("\nAfter Sorting (By Capacity - Descending):");
+        for (Bogie b : bogies) {
+            System.out.println(b);
+        }
     }
 }
