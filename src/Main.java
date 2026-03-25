@@ -1,28 +1,26 @@
 import java.util.HashMap;
 import java.util.Map;
 
- class TrainConsistApp {
-
+public class UseCase6TrainConsistMgmt {
     public static void main(String[] args) {
 
-        System.out.println("=== Train Consist Management App ===");
+        System.out.println("======================================");
+        System.out.println("UC6 - Map Bogie to Capacity (HashMap)");
+        System.out.println("======================================\n");
 
-        // Create HashMap for Bogie → Capacity Mapping
-        HashMap<String, Integer> bogieCapacity = new HashMap<>();
+        Map<String, Integer> capacityMap = new HashMap<>();
 
-        // Insert Key–Value Pairs
-        bogieCapacity.put("Sleeper", 72);
-        bogieCapacity.put("AC Chair", 54);
-        bogieCapacity.put("First Class", 24);
+        capacityMap.put("First Class", 24);
+        capacityMap.put("Cargo", 120);
+        capacityMap.put("Sleeper", 72);
+        capacityMap.put("AC Chair", 56);
 
-        // Iterate using entrySet()
-        System.out.println("\nBogie Capacity Details:");
+        System.out.println("Bogie Capacity Details:\n");
 
-        for (Map.Entry<String, Integer> entry : bogieCapacity.entrySet()) {
-            System.out.println("Bogie: " + entry.getKey() +
-                    " | Capacity: " + entry.getValue());
+        for (Map.Entry<String, Integer> entry : capacityMap.entrySet()) {
+            System.out.println(entry.getKey() + " -> " + entry.getValue());
         }
 
-        System.out.println("\nProgram continues...");
+        System.out.println("\nUC6 bogie-capacity mapping completed...");
     }
 }
