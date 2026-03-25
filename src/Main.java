@@ -1,26 +1,63 @@
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
- class TrainConsistApp {
+public class TrainConsistApp {
 
     public static void main(String[] args) {
 
         System.out.println("=== Train Consist Management App ===");
 
-        // Create HashSet for Unique Bogie IDs
+        List<String> bogies = new ArrayList<>();
+
+        System.out.println("Train consist initialized.");
+        System.out.println("Initial number of bogies: " + bogies.size());
+    }
+}
+import java.util.ArrayList;
+import java.util.List;
+
+public class TrainConsistApp {
+
+    public static void main(String[] args) {
+
+        System.out.println("=== Train Consist Management App ===");
+
+        List<String> passengerBogies = new ArrayList<>();
+
+        passengerBogies.add("Sleeper");
+        passengerBogies.add("AC Chair");
+        passengerBogies.add("First Class");
+
+        System.out.println("Passenger bogies after addition: " + passengerBogies);
+
+        passengerBogies.remove("AC Chair");
+
+        System.out.println("Passenger bogies after removal: " + passengerBogies);
+
+        boolean exists = passengerBogies.contains("Sleeper");
+        System.out.println("Is Sleeper present? " + exists);
+
+        System.out.println("Final bogie list: " + passengerBogies);
+    }
+}
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class TrainConsistApp {
+
+    public static void main(String[] args) {
+
+        System.out.println("=== Train Consist Management App ===");
+
         Set<String> bogieIds = new HashSet<>();
 
-        // Adding Bogie IDs (Including Duplicates Intentionally)
         bogieIds.add("BG101");
         bogieIds.add("BG102");
         bogieIds.add("BG103");
-        bogieIds.add("BG101");   // Duplicate
-        bogieIds.add("BG102");   // Duplicate
+        bogieIds.add("BG101");
+        bogieIds.add("BG102");
 
-        // Display Unique Bogie IDs
-        System.out.println("\nUnique Bogie IDs in Train:");
-        System.out.println(bogieIds);
-
-        System.out.println("\nProgram continues...");
+        System.out.println("Unique Bogie IDs: " + bogieIds);
     }
 }
