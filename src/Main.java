@@ -1,118 +1,63 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
-// Custom Exception for Invalid Booking
-class InvalidBookingException extends Exception {
-    public InvalidBookingException(String message) {
-        super(message);
-    }
-}
+// Bogie Class
+class Bogie {
+    private String name;
+    private int capacity;
 
-// Represents Room Inventory
-class RoomInventory {
-    private Map<String, Integer> roomAvailability;
-
-    public RoomInventory() {
-        roomAvailability = new HashMap<>();
-
-        // Initial inventory
-        roomAvailability.put("Standard", 2);
-        roomAvailability.put("Deluxe", 1);
-        roomAvailability.put("Suite", 1);
+    public Bogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
     }
 
-    // Validate room type
-    public void validateRoomType(String roomType) throws InvalidBookingException {
-        if (!roomAvailability.containsKey(roomType)) {
-            throw new InvalidBookingException("Invalid room type: " + roomType);
-        }
+    public String getName() {
+        return name;
     }
 
-    // Check availability
-    public void validateAvailability(String roomType) throws InvalidBookingException {
-        int available = roomAvailability.get(roomType);
-        if (available <= 0) {
-            throw new InvalidBookingException("No rooms available for type: " + roomType);
-        }
+    public int getCapacity() {
+        return capacity;
     }
 
-    // Allocate room safely
-    public void allocateRoom(String roomType) throws InvalidBookingException {
-        validateRoomType(roomType);
-        validateAvailability(roomType);
-
-        int current = roomAvailability.get(roomType);
-
-        if (current - 1 < 0) {
-            throw new InvalidBookingException("Inventory cannot be negative!");
-        }
-
-        roomAvailability.put(roomType, current - 1);
-    }
-
-    public void displayInventory() {
-        System.out.println("Current Inventory: " + roomAvailability);
-    }
-}
-
-// Booking Service with Validation
-class BookingService {
-    private RoomInventory inventory;
-
-    public BookingService(RoomInventory inventory) {
-        this.inventory = inventory;
-    }
-
-    public void createBooking(String guestName, String roomType) {
-        try {
-            // Input validation
-            if (guestName == null || guestName.trim().isEmpty()) {
-                throw new InvalidBookingException("Guest name cannot be empty.");
-            }
-
-            // Validate and allocate
-            inventory.allocateRoom(roomType);
-
-            // If all validations pass
-            System.out.println("Booking successful for " + guestName +
-                    " in " + roomType + " room.");
-
-        } catch (InvalidBookingException e) {
-            // Graceful failure
-            System.out.println("Booking failed: " + e.getMessage());
-        }
+    @Override
+    public String toString() {
+        return name + " (" + capacity + ")";
     }
 }
 
 // Main Class
- class UseCase9ErrorHandlingValidation {
+public class UC9GroupBogiesByType {
 
     public static void main(String[] args) {
 
-        RoomInventory inventory = new RoomInventory();
-        BookingService bookingService = new BookingService(inventory);
+        // Step 1: Create Bogie List
+        List<Bogie> bogies = new ArrayList<>();
 
-        // Initial state
-        inventory.displayInventory();
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("Sleeper", 72));       // duplicate type
+        bogies.add(new Bogie("AC Chair", 56));      // duplicate type
 
-        System.out.println("\n--- Booking Attempts ---");
+        System.out.println("Original Bogie List:");
+        bogies.forEach(System.out::println);
 
-        // Valid booking
-        bookingService.createBooking("Alice", "Deluxe");
+        // Step 2: Group by Bogie Type (name)
+        Map<String, List<Bogie>> groupedBogies =
+                bogies.stream()
+                      .collect(Collectors.groupingBy(Bogie::getName));
 
-        // Invalid room type
-        bookingService.createBooking("Bob", "Premium");
+        // Step 3: Display Grouped Result
+        System.out.println("\nGrouped Bogies by Type:");
+        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
+            System.out.println("\nType: " + entry.getKey());
+            for (Bogie b : entry.getValue()) {
+                System.out.println("  " + b);
+            }
+        }
 
-        // Empty guest name
-        bookingService.createBooking("", "Standard");
-
-        // Exhaust inventory
-        bookingService.createBooking("Charlie", "Suite");
-        bookingService.createBooking("David", "Suite"); // should fail
-
-        // Final state
-        System.out.println("\n--- Final Inventory ---");
-        inventory.displayInventory();
-
-        System.out.println("\nSystem remains stable after handling errors.");
+        // Step 4: Verify original list unchanged
+        System.out.println("\nOriginal List After Grouping (Unchanged):");
+        bogies.forEach(System.out::println);
     }
 }
