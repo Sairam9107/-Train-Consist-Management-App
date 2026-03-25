@@ -1,38 +1,24 @@
 import java.util.LinkedList;
 
- class TrainConsistApp {
+public class TrainConsistApp {
 
     public static void main(String[] args) {
 
         System.out.println("=== Train Consist Management App ===");
 
-        // Create LinkedList for Train Consist
-        LinkedList<String> trainConsist = new LinkedList<>();
+        LinkedList<String> train = new LinkedList<>();
 
-        // Add Bogies (Initial Formation)
-        trainConsist.add("Engine");
-        trainConsist.add("Sleeper");
-        trainConsist.add("AC");
-        trainConsist.add("Cargo");
-        trainConsist.add("Guard");
+        train.add("Engine");
+        train.add("Sleeper");
+        train.add("AC");
+        train.add("Cargo");
+        train.add("Guard");
 
-        System.out.println("\nInitial Train Consist:");
-        System.out.println(trainConsist);
+        train.add(2, "Pantry Car");
 
-        // Insert Pantry Car at Position 2
-        trainConsist.add(2, "Pantry");
+        train.removeFirst();
+        train.removeLast();
 
-        System.out.println("\nAfter inserting Pantry Car at position 2:");
-        System.out.println(trainConsist);
-
-        // Remove First and Last Bogie
-        trainConsist.removeFirst();
-        trainConsist.removeLast();
-
-        // Final Ordered Consist
-        System.out.println("\nFinal Train Consist:");
-        System.out.println(trainConsist);
-
-        System.out.println("\nProgram continues...");
+        System.out.println("Final Train Consist: " + train);
     }
 }
