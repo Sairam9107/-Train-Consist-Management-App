@@ -1,41 +1,42 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class TrainConsistApp {
+public class TrainConsistApp {
 
     public static void main(String[] args) {
 
         System.out.println("=== Train Consist Management App ===");
 
-        // Create ArrayList for Passenger Bogies
+        List<String> bogies = new ArrayList<>();
+
+        System.out.println("Train consist initialized.");
+        System.out.println("Initial number of bogies: " + bogies.size());
+    }
+}
+import java.util.ArrayList;
+import java.util.List;
+
+public class TrainConsistApp {
+
+    public static void main(String[] args) {
+
+        System.out.println("=== Train Consist Management App ===");
+
         List<String> passengerBogies = new ArrayList<>();
 
-        // ADD Operations
         passengerBogies.add("Sleeper");
         passengerBogies.add("AC Chair");
         passengerBogies.add("First Class");
 
-        // Display After Insertion
-        System.out.println("\nPassenger Bogies after addition:");
-        System.out.println(passengerBogies);
+        System.out.println("Passenger bogies after addition: " + passengerBogies);
 
-        // REMOVE Operation (Removing AC Chair)
         passengerBogies.remove("AC Chair");
 
-        System.out.println("\nPassenger Bogies after removal of AC Chair:");
-        System.out.println(passengerBogies);
+        System.out.println("Passenger bogies after removal: " + passengerBogies);
 
-        // CONTAINS Operation
-        if (passengerBogies.contains("Sleeper")) {
-            System.out.println("\nSleeper bogie exists in the train.");
-        } else {
-            System.out.println("\nSleeper bogie does not exist.");
-        }
+        boolean exists = passengerBogies.contains("Sleeper");
+        System.out.println("Is Sleeper present? " + exists);
 
-        // Final State
-        System.out.println("\nFinal Passenger Bogie List:");
-        System.out.println(passengerBogies);
-
-        System.out.println("\nProgram continues...");
+        System.out.println("Final bogie list: " + passengerBogies);
     }
 }
