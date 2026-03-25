@@ -1,28 +1,105 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
- class TrainConsistApp {
+// Represents an Add-On Service
+class AddOnService {
+    private String serviceName;
+    private double cost;
+
+    public AddOnService(String serviceName, double cost) {
+        this.serviceName = serviceName;
+        this.cost = cost;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    @Override
+    public String toString() {
+        return serviceName + " (₹" + cost + ")";
+    }
+}
+
+// Manages Add-On Services for Reservations
+class AddOnServiceManager {
+
+    // Map: Reservation ID → List of Services
+    private Map<String, List<AddOnService>> reservationServicesMap;
+
+    public AddOnServiceManager() {
+        reservationServicesMap = new HashMap<>();
+    }
+
+    // Add service to a reservation
+    public void addService(String reservationId, AddOnService service) {
+        reservationServicesMap
+                .computeIfAbsent(reservationId, k -> new ArrayList<>())
+                .add(service);
+    }
+
+    // Get all services for a reservation
+    public List<AddOnService> getServices(String reservationId) {
+        return reservationServicesMap.getOrDefault(reservationId, new ArrayList<>());
+    }
+
+    // Calculate total add-on cost
+    public double calculateTotalCost(String reservationId) {
+        List<AddOnService> services = getServices(reservationId);
+        double total = 0.0;
+
+        for (AddOnService service : services) {
+            total += service.getCost();
+        }
+
+        return total;
+    }
+
+    // Display services for a reservation
+    public void displayServices(String reservationId) {
+        List<AddOnService> services = getServices(reservationId);
+
+        if (services.isEmpty()) {
+            System.out.println("No add-on services selected.");
+            return;
+        }
+
+        System.out.println("Add-On Services for Reservation ID: " + reservationId);
+        for (AddOnService service : services) {
+            System.out.println("- " + service);
+        }
+
+        System.out.println("Total Add-On Cost: ₹" + calculateTotalCost(reservationId));
+    }
+}
+
+// Main Class
+ class UseCase7AddOnServiceSelection {
 
     public static void main(String[] args) {
 
-        System.out.println("=== Train Consist Management App ===");
+        AddOnServiceManager manager = new AddOnServiceManager();
 
-        // Create HashMap for Bogie → Capacity Mapping
-        HashMap<String, Integer> bogieCapacity = new HashMap<>();
+        // Sample Reservation ID (Assumed existing booking)
+        String reservationId = "RES123";
 
-        // Insert Key–Value Pairs
-        bogieCapacity.put("Sleeper", 72);
-        bogieCapacity.put("AC Chair", 54);
-        bogieCapacity.put("First Class", 24);
+        // Guest selects add-on services
+        AddOnService breakfast = new AddOnService("Breakfast", 500);
+        AddOnService airportPickup = new AddOnService("Airport Pickup", 1200);
+        AddOnService spa = new AddOnService("Spa Access", 2000);
 
-        // Iterate using entrySet()
-        System.out.println("\nBogie Capacity Details:");
+        // Adding services to reservation
+        manager.addService(reservationId, breakfast);
+        manager.addService(reservationId, airportPickup);
+        manager.addService(reservationId, spa);
 
-        for (Map.Entry<String, Integer> entry : bogieCapacity.entrySet()) {
-            System.out.println("Bogie: " + entry.getKey() +
-                    " | Capacity: " + entry.getValue());
-        }
+        // Display selected services
+        manager.displayServices(reservationId);
 
-        System.out.println("\nProgram continues...");
+        // Demonstrate independence from booking system
+        System.out.println("\nNote: Booking and room allocation remain unchanged.");
     }
 }
